@@ -5,258 +5,1029 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>AlphaMind AI</title>
+<title>AlphaMind</title>
+
+<script src="https://unpkg.com/lightweight-charts@5.0.0/dist/lightweight-charts.standalone.production.js"></script>
 
 <style>
-*{box-sizing:border-box}
+
+:root{
+--bg:#070b12;
+--panel:#0d131d;
+--panel2:#111a26;
+--border:#1e2a3a;
+--text:#f4f7fb;
+--muted:#8290a3;
+--green:#20d695;
+--red:#ff5964;
+--yellow:#f5c451;
+--blue:#5ca9ff;
+--purple:#9b7cff;
+}
+
+*{
+box-sizing:border-box;
+}
 
 body{
 margin:0;
-font-family:Arial,sans-serif;
-background:#07111f;
-color:#fff;
+background:
+radial-gradient(circle at 50% -10%,#14263a 0,#070b12 45%);
+color:var(--text);
+font-family:Inter,Arial,sans-serif;
 }
 
-.container{
-max-width:900px;
+button,input,select{
+font:inherit;
+}
+
+.app{
+max-width:1100px;
 margin:auto;
-padding:16px;
-}
-
-.header{
-text-align:center;
-padding:20px 0 8px;
-}
-
-.logo{
-font-size:36px;
-font-weight:bold;
-color:#35e69a;
-}
-
-.subtitle{
-color:#91a4bd;
-margin-top:8px;
-font-size:15px;
-}
-
-.card{
-background:#0d1b2d;
-border:1px solid #1c3553;
-border-radius:18px;
 padding:18px;
-margin:16px 0;
+padding-bottom:90px;
 }
 
-h2{
-margin-top:0;
-font-size:21px;
+.topbar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+padding:10px 0 22px;
 }
 
-h3{
-margin-bottom:7px;
+.brand{
+font-size:25px;
+font-weight:800;
+letter-spacing:-.5px;
 }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:12px;
+.brand span{
+color:var(--green);
 }
 
-label{
-color:#9eb0c8;
-font-size:14px;
+.status{
+font-size:12px;
+color:var(--muted);
 }
 
-input,select,button{
-width:100%;
-margin-top:7px;
-padding:13px;
+.status i{
+display:inline-block;
+width:7px;
+height:7px;
+background:var(--green);
+border-radius:50%;
+margin-right:6px;
+}
+
+.nav{
+display:flex;
+gap:7px;
+overflow-x:auto;
+padding-bottom:5px;
+margin-bottom:18px;
+}
+
+.nav button{
+white-space:nowrap;
+border:1px solid var(--border);
+background:var(--panel);
+color:var(--muted);
+padding:10px 14px;
 border-radius:10px;
-border:1px solid #294666;
-background:#081625;
-color:white;
-font-size:16px;
-}
-
-button{
-background:#16a36a;
-border:none;
-font-weight:bold;
 cursor:pointer;
 }
 
-button:hover{
-background:#1bc47e;
+.nav button.active{
+background:#143326;
+border-color:#226c4f;
+color:#fff;
 }
 
-.market{
-padding:16px 0;
-border-bottom:1px solid #203853;
+.page{
+display:none;
 }
 
-.market:last-child{
-border-bottom:none;
+.page.active{
+display:block;
 }
 
-.market-top{
+.card{
+background:rgba(13,19,29,.94);
+border:1px solid var(--border);
+border-radius:17px;
+padding:18px;
+margin-bottom:15px;
+box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+
+.section-title{
 display:flex;
 justify-content:space-between;
 align-items:center;
 gap:10px;
+margin-bottom:15px;
 }
 
-.name{
+.section-title h2{
 font-size:18px;
-font-weight:bold;
+margin:0;
 }
 
-.price{
-font-size:21px;
-font-weight:bold;
+.section-title small{
+color:var(--muted);
 }
 
-.change{
-margin-top:5px;
-font-size:14px;
+.hero{
+background:
+linear-gradient(135deg,#10251e,#0c151d 55%);
+border:1px solid #20563f;
 }
 
-.green{color:#35e69a}
-.red{color:#ff6262}
-.yellow{color:#ffd166}
-.blue{color:#62b6ff}
+.hero-label{
+font-size:12px;
+font-weight:700;
+letter-spacing:1px;
+color:var(--green);
+}
+
+.hero-title{
+font-size:30px;
+font-weight:800;
+margin:7px 0;
+}
+
+.hero-text{
+color:#b7c4d4;
+line-height:1.5;
+max-width:750px;
+}
+
+.hero-grid{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:10px;
+margin-top:18px;
+}
+
+.metric{
+background:rgba(0,0,0,.2);
+border:1px solid rgba(255,255,255,.06);
+border-radius:12px;
+padding:13px;
+}
+
+.metric small{
+display:block;
+color:var(--muted);
+font-size:11px;
+margin-bottom:5px;
+}
+[18/09, 21:24] Chatt: .metric strong{
+font-size:17px;
+}
+
+.opportunities{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:12px;
+}
+
+.asset-card{
+background:var(--panel);
+border:1px solid var(--border);
+border-radius:15px;
+padding:15px;
+cursor:pointer;
+transition:.2s;
+}
+
+.asset-card:hover{
+border-color:#31506f;
+transform:translateY(-1px);
+}
+
+.asset-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.asset-name{
+font-weight:700;
+}
+
+.asset-price{
+font-size:20px;
+font-weight:800;
+margin-top:12px;
+}
+
+.pill{
+display:inline-block;
+padding:5px 8px;
+border-radius:20px;
+font-size:10px;
+font-weight:800;
+}
+
+.pill.green{
+background:#103a2b;
+color:var(--green);
+}
+
+.pill.red{
+background:#401d22;
+color:var(--red);
+}
+
+.pill.yellow{
+background:#40351b;
+color:var(--yellow);
+}
 
 .score{
-font-size:30px;
-font-weight:bold;
+font-size:25px;
+font-weight:800;
 }
 
-.badge{
-display:inline-block;
-padding:6px 10px;
-border-radius:20px;
-background:#122943;
-margin-top:7px;
-font-size:12px;
-font-weight:bold;
-}
-
-.explain{
-background:#081625;
-border-radius:12px;
-padding:12px;
-margin-top:12px;
-line-height:1.5;
-color:#d7e1ec;
-}
-
-.simple{
-border-left:4px solid #35e69a;
-padding:12px;
-background:#091a29;
-border-radius:8px;
+.reason{
+color:#aebaca;
+font-size:13px;
+line-height:1.45;
 margin-top:10px;
+}
+
+.scenario{
+margin-top:12px;
+padding:11px;
+background:#091019;
+border-radius:10px;
+font-size:13px;
 line-height:1.5;
 }
 
-.indicators{
+.green{
+color:var(--green);
+}
+
+.red{
+color:var(--red);
+}
+
+.yellow{
+color:var(--yellow);
+}
+
+.blue{
+color:var(--blue);
+}
+
+.muted{
+color:var(--muted);
+}
+
+.chart-wrap{
+height:430px;
+width:100%;
+}
+
+.chart{
+height:100%;
+width:100%;
+}
+
+.toolbar{
+display:flex;
+gap:7px;
+overflow-x:auto;
+margin-bottom:12px;
+}
+
+.toolbar button{
+background:#0a111b;
+border:1px solid var(--border);
+color:var(--muted);
+padding:8px 11px;
+border-radius:8px;
+white-space:nowrap;
+}
+
+.toolbar button.active{
+color:#fff;
+border-color:#3978ae;
+}
+
+.chart-info{
 display:grid;
-grid-template-columns:repeat(2,1fr);
+grid-template-columns:repeat(5,1fr);
 gap:8px;
 margin-top:12px;
 }
 
-.indicator{
-background:#081625;
-padding:10px;
+.orderbook{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+
+.book-side{
+background:#090f17;
+border-radius:12px;
+padding:12px;
+}
+
+.book-row{
+display:grid;
+grid-template-columns:1fr 1fr;
+font-size:12px;
+padding:6px 0;
+border-bottom:1px solid rgba(255,255,255,.04);
+}
+
+.book-row:last-child{
+border-bottom:0;
+}
+
+.ask{
+color:var(--red);
+}
+
+.bid{
+color:var(--green);
+}
+
+.search{
+display:flex;
+gap:8px;
+}
+
+.search input{
+flex:1;
+background:#080e16;
+border:1px solid var(--border);
+color:#fff;
 border-radius:10px;
+padding:13px;
+outline:none;
 }
 
-.indicator small{
-display:block;
-color:#8298b0;
-margin-bottom:4px;
+.search button{
+background:var(--green);
+border:0;
+border-radius:10px;
+padding:0 17px;
+font-weight:700;
 }
 
-.loading{
-color:#9eb0c8;
-text-align:center;
-padding:20px;
+.definition{
+margin-top:15px;
+background:#091019;
+border-radius:12px;
+padding:16px;
+line-height:1.6;
 }
 
-.vocab-item{
-border-bottom:1px solid #203853;
+.definition h3{
+margin-top:0;
+color:var(--green);
+}
+
+.news-item{
 padding:14px 0;
+border-bottom:1px solid var(--border);
+}
+
+.news-item:last-child{
+border:0;
+}
+
+.news-tag{
+font-size:10px;
+color:var(--blue);
+font-weight:bold;
+}
+
+.news-title{
+font-weight:700;
+margin:5px 0;
+}
+
+.news-text{
+font-size:13px;
+color:#9facbd;
 line-height:1.5;
 }
 
-.vocab-item:last-child{
-border-bottom:none;
+.cycle{
+padding:15px;
+border:1px solid var(--border);
+border-radius:12px;
+margin-bottom:10px;
 }
 
-.vocab-term{
-font-size:18px;
-font-weight:bold;
-color:#35e69a;
+.cycle-bar{
+height:9px;
+background:#1a2634;
+border-radius:20px;
+overflow:hidden;
+margin-top:10px;
 }
 
-.vocab-simple{
-color:#fff;
-margin-top:5px;
+.cycle-fill{
+height:100%;
+background:linear-gradient(90deg,#20d695,#5ca9ff);
 }
 
-.vocab-tech{
-color:#91a4bd;
-font-size:13px;
-margin-top:5px;
+.portfolio-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+}
+
+.portfolio-box{
+background:#091019;
+padding:15px;
+border-radius:12px;
+}
+
+.alert-box{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:15px;
+padding:14px;
+background:#091019;
+border-radius:12px;
+}
+
+.switch{
+width:52px;
+height:29px;
+background:#253243;
+border-radius:20px;
+padding:3px;
+cursor:pointer;
+}
+
+.switch.on{
+background:#167b58;
+}
+
+.switch-dot{
+width:23px;
+height:23px;
+background:white;
+border-radius:50%;
+transition:.2s;
+}
+
+.switch.on .switch-dot{
+transform:translateX(23px);
 }
 
 .warning{
-background:#2a2110;
-border:1px solid #6c5520;
-padding:12px;
-border-radius:10px;
-line-height:1.5;
-color:#ffe5a3;
-}
-
-.disclaimer{
-color:#71869f;
 font-size:12px;
-[18/09, 20:33] Chatt: line-height:1.5;
+color:#8795a8;
+line-height:1.5;
 }
 
-.small{
-font-size:13px;
-color:#91a4bd;
+.footer{
+text-align:center;
+color:#536175;
+font-size:11px;
+margin-top:25px;
 }
 
-@media(max-width:500px){
-.logo{font-size:30px}
-.price{font-size:18px}
-.score{font-size:25px}
-.indicators{grid-template-columns:1fr 1fr}
+.empty{
+text-align:center;
+padding:30px;
+color:var(--muted);
 }
+[18/09, 21:24] Chatt: @media(max-width:750px){
+
+.app{
+padding:12px;
+}
+
+.opportunities{
+grid-template-columns:1fr;
+}
+
+.hero-grid{
+grid-template-columns:1fr 1fr;
+}
+
+.chart-info{
+grid-template-columns:1fr 1fr;
+}
+
+.portfolio-grid{
+grid-template-columns:1fr 1fr;
+}
+
+.hero-title{
+font-size:25px;
+}
+
+.chart-wrap{
+height:350px;
+}
+
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="app">
 
-<div class="header">
-<div class="logo">🧠 AlphaMind AI</div>
-<div class="subtitle">
-La finanza spiegata in modo semplice
+<div class="topbar">
+
+<div class="brand">
+<span>α</span> AlphaMind
 </div>
+
+<div class="status">
+<i></i> Mercato attivo
+</div>
+
+</div>
+
+
+<div class="nav">
+
+<button class="active" onclick="showPage('home',this)">
+Panoramica
+</button>
+
+<button onclick="showPage('analysis',this)">
+Analisi
+</button>
+
+<button onclick="showPage('liquidity',this)">
+Liquidità
+</button>
+
+<button onclick="showPage('news',this)">
+News
+</button>
+
+<button onclick="showPage('cycles',this)">
+Cicli
+</button>
+
+<button onclick="showPage('learn',this)">
+Impara
+</button>
+
+<button onclick="showPage('portfolio',this)">
+Portafoglio
+</button>
+
+</div>
+
+
+<!-- HOME -->
+
+<section id="home" class="page active">
+
+<div class="card hero">
+
+<div class="hero-label">
+ALPHAMIND MARKET SCAN
+</div>
+
+<div class="hero-title" id="heroTitle">
+Sto analizzando il mercato...
+</div>
+
+<div class="hero-text" id="heroText">
+Cerco configurazioni interessanti tra prezzo,
+trend, momentum, volume e liquidità.
+</div>
+
+<div class="hero-grid">
+
+<div class="metric">
+<small>Migliore setup</small>
+<strong id="heroAsset">—</strong>
+</div>
+
+<div class="metric">
+<small>Score</small>
+<strong id="heroScore">—</strong>
+</div>
+
+<div class="metric">
+<small>Rischio</small>
+<strong id="heroRisk">—</strong>
+</div>
+
+</div>
+
 </div>
 
 
 <div class="card">
 
-<h2>⚙️ Il tuo profilo</h2>
+<div class="section-title">
+
+<h2>Opportunità adesso</h2>
+
+<small id="lastUpdate">
+— 
+</small>
+
+</div>
+
+<div id="opportunities" class="opportunities">
+
+<div class="empty">
+Analisi in corso...
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="section-title">
+
+<h2>🔔 Alert</h2>
+
+</div>
+
+<div class="alert-box">
+
+<div>
+
+<strong>Avvisami quando appare un setup forte</strong>
+
+<div class="small muted">
+Funziona mentre AlphaMind è aperto.
+</div>
+
+</div>
+
+<div class="switch" id="alertSwitch" onclick="toggleAlerts()">
+
+<div class="switch-dot"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ANALISI -->
+
+<section id="analysis" class="page">
+
+<div class="card">
+
+<div class="section-title">
+
+<h2>Analisi tecnica</h2>
+
+<select id="assetSelect" onchange="loadChart()"
+style="width:auto;margin:0">
+
+<option value="BTCUSDT">Bitcoin</option>
+<option value="ETHUSDT">Ethereum</option>
+<option value="SOLUSDT">Solana</option>
+
+</select>
+
+</div>
+
+<div class="toolbar">
+
+<button class="active" onclick="changeInterval('15m',this)">15m</button>
+<button onclick="changeInterval('1h',this)">1H</button>
+<button onclick="changeInterval('4h',this)">4H</button>
+<button onclick="changeInterval('1d',this)">1D</button>
+
+</div>
+
+<div class="chart-wrap">
+<div id="mainChart" class="chart"></div>
+</div>
+
+<div id="chartInfo" class="chart-info"></div>
+
+</div>
+
+<div class="card">
+
+<h2>🧠 Lettura AlphaMind</h2>
+
+<div id="technicalExplanation">
+Caricamento...
+</div>
+
+</div>
+
+</section>
+
+
+<!-- LIQUIDITA -->
+
+<section id="liquidity" class="page">
+
+<div class="card">
+
+<div class="section-title">
+
+<h2>Liquidità del mercato</h2>
+
+<select id="bookSelect" onchange="loadOrderBook()"
+style="width:auto;margin:0">
+
+<option value="BTCUSDT">BTC</option>
+<option value="ETHUSDT">ETH</option>
+<option value="SOLUSDT">SOL</option>
+
+</select>
+
+</div>
+
+<div class="hero-text">
+Qui puoi vedere dove si concentrano gli ordini disponibili
+nel book pubblico dell'exchange selezionato.
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>Order book</h2>
+
+<div class="orderbook">
+
+<div class="book-side">
+
+<strong class="ask">
+VENDITE / ASK
+</strong>
+
+<div id="asks"></div>
+
+</div>
+
+<div class="book-side">
+[18/09, 21:24] Chatt: <strong class="bid">
+ACQUISTI / BID
+</strong>
+
+<div id="bids"></div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>📍 Come leggerlo</h2>
+
+<div class="definition">
+
+<strong>In parole semplici:</strong><br><br>
+
+Se trovi una grande quantità di ordini in una certa zona
+di prezzo, quella zona può diventare interessante da osservare.
+
+<br><br>
+
+<strong>⚠️ Attenzione:</strong><br>
+
+Gli ordini possono essere inseriti e rimossi velocemente.
+Quindi la liquidità che vedi non è una garanzia che il prezzo
+si fermerà proprio lì.
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- NEWS -->
+
+<section id="news" class="page">
+
+<div class="card hero">
+
+<div class="hero-label">
+CATALIZZATORI
+</div>
+
+<div class="hero-title">
+Cosa può muovere il mercato?
+</div>
+
+<div class="hero-text">
+AlphaMind separerà le notizie dagli scenari.
+Una notizia non significa automaticamente “compra” o “vendi”.
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="section-title">
+<h2>📰 Monitoraggio</h2>
+<span class="pill yellow">DA COLLEGARE</span>
+</div>
+
+<div class="news-item">
+
+<div class="news-tag">
+MACRO
+</div>
+
+<div class="news-title">
+Inflazione, tassi e decisioni delle banche centrali
+</div>
+
+<div class="news-text">
+Possono modificare la propensione al rischio degli investitori
+e quindi influenzare anche il mercato crypto.
+</div>
+
+</div>
+
+<div class="news-item">
+
+<div class="news-tag">
+CRYPTO
+</div>
+
+<div class="news-title">
+ETF, regolamentazione, aggiornamenti di rete e grandi flussi
+</div>
+
+<div class="news-text">
+Eventi di questo tipo possono creare movimenti importanti,
+ma l'effetto dipende dal contesto del mercato.
+</div>
+
+</div>
+
+<div class="news-item">
+
+<div class="news-tag">
+ALPHAMIND
+</div>
+
+<div class="news-title">
+Prossimo passo: feed di notizie in tempo reale
+</div>
+
+<div class="news-text">
+Questa parte richiederà una fonte dati/news dedicata.
+Non inseriamo notizie inventate.
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- CICLI -->
+
+<section id="cycles" class="page">
+
+<div class="card">
+
+<div class="section-title">
+<h2>📈 Confronto dei cicli</h2>
+</div>
+
+<div class="hero-text">
+Il confronto dei cicli serve a vedere come si è comportato
+il prezzo in periodi storici simili. Non significa che il futuro
+debba ripetere il passato.
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="cycle">
+
+<strong>Bitcoin — ciclo precedente</strong>
+
+<div class="small muted">
+Halving → fase di espansione
+</div>
+
+<div class="cycle-bar">
+<div class="cycle-fill" style="width:78%"></div>
+</div>
+
+</div>
+
+<div class="cycle">
+
+<strong>Bitcoin — ciclo precedente</strong>
+
+<div class="small muted">
+Halving → massimo storico
+</div>
+
+<div class="cycle-bar">
+<div class="cycle-fill" style="width:92%"></div>
+</div>
+
+</div>
+
+<div class="cycle">
+
+<strong>Bitcoin — ciclo attuale</strong>
+
+<div class="small muted">
+Posizione temporale relativa
+</div>
+
+<div class="cycle-bar">
+<div class="cycle-fill" style="width:55%"></div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>⚠️ Nota</h2>
+
+<div class="warning">
+I cicli storici sono strumenti di confronto.
+Non sono una previsione certa del prezzo futuro.
+</div>
+
+</div>
+
+</section>
+
+
+<!-- IMPARA -->
+
+<section id="learn" class="page">
+
+<div class="card">
+
+<div class="section-title">
+
+<h2>📚 Spiega un termine</h2>
+
+</div>
+
+<div class="hero-text">
+Scrivi una parola, un concetto o una frase che hai trovato
+nel mondo della finanza.
+</div>
+
+<div class="search">
+
+<input id="termInput"
+placeholder="Es. bull trap, RSI, liquidità...">
+
+<button onclick="explainTerm()">
+Spiega
+</button>
+
+</div>
+
+<div id="definition" class="definition" style="display:none"></div>
+
+</div>
+
+</section>
+
+
+<!-- PORTAFOGLIO -->
+
+<section id="portfolio" class="page">
+
+<div class="card">
+
+<h2>💰 Il tuo profilo</h2>
 
 <div class="grid">
 
@@ -264,19 +1035,7 @@ La finanza spiegata in modo semplice
 Capitale (€)
 <input id="capital" type="number" value="10000">
 </label>
-
-<label>
-Orizzonte
-<select id="horizon">
-<option value="3">3 mesi</option>
-<option value="6">6 mesi</option>
-<option value="12" selected>12 mesi</option>
-<option value="24">24 mesi</option>
-<option value="36">36 mesi</option>
-</select>
-</label>
-
-<label>
+[18/09, 21:24] Chatt: <label>
 Rischio
 <select id="risk">
 <option value="basso">Basso</option>
@@ -287,161 +1046,24 @@ Rischio
 
 </div>
 
-<button onclick="analyze()">
-🔎 ANALIZZA IL MERCATO
+<button onclick="buildPortfolio()"
+style="margin-top:15px;width:100%;padding:13px;background:var(--green);border:0;border-radius:10px;font-weight:bold">
+
+Calcola struttura
+
 </button>
 
 </div>
 
+<div id="portfolioResult"></div>
 
-<div class="card">
-
-<h2>📡 Mercato</h2>
-
-<div id="market">
-<div class="loading">
-Sto recuperando i dati...
-</div>
-</div>
-
-</div>
+</section>
 
 
-<div class="card">
+<div class="footer">
 
-<h2>🧠 Analisi AlphaMind</h2>
-
-<div id="analysis">
-<div class="loading">
-Premi "Analizza il mercato"
-</div>
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>🏆 Classifica</h2>
-
-<div id="ranking">
-<div class="loading">
-Premi "Analizza il mercato"
-</div>
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>💰 Il tuo capitale</h2>
-
-<div id="portfolio">
-Inserisci il capitale e avvia l'analisi.
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>📚 Vocabolario AlphaMind</h2>
-
-<div class="small">
-Non conosci un termine? Qui te lo spieghiamo senza parole difficili.
-</div>
-
-<div class="vocab-item">
-<div class="vocab-term">RSI</div>
-<div class="vocab-simple">
-<strong>In parole semplici:</strong> ci dice se il prezzo è salito o sceso molto velocemente.
-</div>
-<div class="vocab-tech">
-Sopra 70 può indicare un mercato molto "tirato"; sotto 30 può indicare un mercato molto "scarico".
-</div>
-</div>
-
-<div class="vocab-item">
-<div class="vocab-term">MACD</div>
-<div class="vocab-simple">
-<strong>In parole semplici:</strong> cerca di capire se la spinta del prezzo sta aumentando oppure diminuendo.
-</div>
-</div>
-
-<div class="vocab-item">
-<div class="vocab-term">EMA</div>
-<div class="vocab-simple">
-<strong>In parole semplici:</strong> è una linea che segue il prezzo e ci aiuta a capire la direzione del mercato.
-</div>
-</div>
-
-<div class="vocab-item">
-<div class="vocab-term">Momentum</div>
-<div class="vocab-simple">
-<strong>In parole semplici:</strong> misura quanto forte è la spinta recente del prezzo.
-</div>
-</div>
-
-<div class="vocab-item">
-<div class="vocab-term">Volume</div>
-<div class="vocab-simple">
-<strong>In parole semplici:</strong> indica quanta attività c'è sul mercato.
-</div>
-</div>
-
-<div class="vocab-item">
-<div class="vocab-term">Volatilità</div>
-<div class="vocab-simple">
-<strong>In parole semplici:</strong> indica quanto il prezzo può muoversi bruscamente.
-</div>
-</div>
-
-<div class="vocab-item">
-<div class="vocab-term">Trend</div>
-<div class="vocab-simple">
-<strong>In parole semplici:</strong> ci dice se il mercato sta andando principalmente verso l'alto, verso il basso o di lato.
-</div>
-</div>
-
-<div class="vocab-item">
-<div class="vocab-term">Supporto</div>
-<div class="vocab-simple">
-<strong>In parole semplici:</strong> una zona che in passato ha fatto da possibile "pavimento" al prezzo.
-</div>
-</div>
-
-<div class="vocab-item">
-<div class="vocab-term">Resistenza</div>
-<div class="vocab-simple">
-<strong>In parole semplici:</strong> una zona che in passato ha fatto da possibile "soffitto" al prezzo.
-</div>
-</div>
-
-<div class="vocab-item">
-<div class="vocab-term">Drawdown</div>
-<div class="vocab-simple">
-[18/09, 20:33] Chatt: <strong>In parole semplici:</strong> quanto un investimento è sceso dal suo punto più alto prima di recuperare.
-</div>
-</div>
-
-</div>
-
-
-<div class="card warning">
-
-⚠️ <strong>Importante</strong><br><br>
-
-AlphaMind non può sapere con certezza cosa farà il mercato.
-Il punteggio serve a riassumere diversi segnali, non è una promessa di guadagno.
-
-</div>
-
-
-<div class="card disclaimer">
-
-AlphaMind è uno strumento di ricerca e supporto decisionale.
-Non costituisce consulenza finanziaria personalizzata.
+AlphaMind — ricerca e supporto decisionale.<br>
+Nessun risultato garantito. Nessuna consulenza finanziaria personalizzata.
 
 </div>
 
@@ -450,93 +1072,123 @@ Non costituisce consulenza finanziaria personalizzata.
 
 <script>
 
-let marketData=[];
-
-
 /* =========================
    CONFIGURAZIONE
 ========================= */
 
-const assets=[
+const ASSETS=[
+
 {
 symbol:"BTCUSDT",
 name:"Bitcoin",
-emoji:"🟠"
+short:"BTC",
+emoji:"₿"
 },
+
 {
 symbol:"ETHUSDT",
 name:"Ethereum",
-emoji:"🔵"
+short:"ETH",
+emoji:"Ξ"
 },
+
 {
 symbol:"SOLUSDT",
 name:"Solana",
-emoji:"🟣"
+short:"SOL",
+emoji:"◎"
 }
+
 ];
+
+let market=[];
+let currentInterval="15m";
+let chart;
+let candleSeries;
+let volumeSeries;
+let alerts=false;
 
 
 /* =========================
-   API BINANCE
+   NAVIGAZIONE
 ========================= */
 
-async function getTicker(symbol){
+function showPage(id,button){
 
-const response=await fetch(
+document.querySelectorAll(".page")
+.forEach(p=>p.classList.remove("active"));
+
+document.getElementById(id)
+.classList.add("active");
+
+document.querySelectorAll(".nav button")
+.forEach(b=>b.classList.remove("active"));
+
+button.classList.add("active");
+
+if(id==="analysis"){
+setTimeout(loadChart,100);
+}
+
+if(id==="liquidity"){
+loadOrderBook();
+}
+
+}
+
+
+/* =========================
+   API
+========================= */
+
+async function api(url){
+
+const response=await fetch(url);
+
+if(!response.ok)
+throw new Error("Errore API");
+
+return response.json();
+
+}
+
+
+async function ticker(symbol){
+
+return api(
 "https://api.binance.com/api/v3/ticker/24hr?symbol="+symbol
 );
 
-if(!response.ok)
-throw new Error("Errore dati");
-
-return await response.json();
-
 }
 
 
-async function getKlines(symbol){
+async function klines(symbol,interval="1h",limit=200){
 
-const response=await fetch(
+return api(
 "https://api.binance.com/api/v3/klines?symbol="+
 symbol+
-"&interval=1h&limit=200"
+"&interval="+
+interval+
+"&limit="+
+limit
 );
-
-if(!response.ok)
-throw new Error("Errore candele");
-
-return await response.json();
 
 }
 
 
 /* =========================
-   CALCOLI
+   INDICATORI
 ========================= */
-
-function closes(klines){
-
-return klines.map(k=>parseFloat(k[4]));
-
-}
-
-
-function volumes(klines){
-
-return klines.map(k=>parseFloat(k[5]));
-
-}
-
 
 function ema(values,period){
 
 if(values.length<period)
-return values[values.length-1];
+return values.at(-1);
 
-let multiplier=2/(period+1);
+const multiplier=2/(period+1);
 
-let result=values
-.slice(0,period)
+let result=
+values.slice(0,period)
 .reduce((a,b)=>a+b,0)/period;
 
 for(let i=period;i<values.length;i++){
@@ -553,81 +1205,49 @@ return result;
 
 function rsi(values,period=14){
 
-if(values.length<=period)
+if(values.length<period+1)
 return 50;
 
-let gains=0;
-let losses=0;
+let gain=0;
+let loss=0;
 
 for(let i=1;i<=period;i++){
 
-let change=values[i]-values[i-1];
+const change=
+values[i]-values[i-1];
 
 if(change>=0)
-gains+=change;
+gain+=change;
 else
-losses+=Math.abs(change);
+loss+=Math.abs(change);
 
 }
 
-let avgGain=gains/period;
-let avgLoss=losses/period;
+let avgGain=gain/period;
+let avgLoss=loss/period;
 
 for(let i=period+1;i<values.length;i++){
 
-let change=values[i]-values[i-1];
+const change=
+values[i]-values[i-1];
 
-let gain=change>0?change:0;
-let loss=change<0?Math.abs(change):0;
+const g=change>0?change:0;
+const l=change<0?Math.abs(change):0;
 
-avgGain=((avgGain*(period-1))+gain)/period;
-avgLoss=((avgLoss*(period-1))+loss)/period;
+avgGain=
+(avgGain*(period-1)+g)/period;
+
+avgLoss=
+(avgLoss*(period-1)+l)/period;
 
 }
 
 if(avgLoss===0)
 return 100;
 
-let rs=avgGain/avgLoss;
+const rs=avgGain/avgLoss;
 
 return 100-(100/(1+rs));
-
-}
-
-
-function macd(values){
-
-let e12=ema(values,12);
-let e26=ema(values,26);
-
-return e12-e26;
-
-}
-
-
-function volatility(values){
-
-let returns=[];
-
-for(let i=1;i<values.length;i++){
-
-returns.push(
-(values[i]-values[i-1])/values[i-1]
-);
-
-}
-
-let mean=
-returns.reduce((a,b)=>a+b,0)/
-returns.length;
-
-let variance=
-returns.reduce(
-(sum,r)=>sum+Math.pow(r-mean,2),
-0
-)/returns.length;
-
-return Math.sqrt(variance)*100;
 
 }
 
@@ -637,175 +1257,175 @@ function momentum(values){
 if(values.length<25)
 return 0;
 
-let old=values[values.length-25];
-let current=values[values.length-1];
+const old=values.at(-25);
+const now=values.at(-1);
 
-return ((current-old)/old)*100;
+return ((now-old)/old)*100;
+
+}
+
+
+function volatility(values){
+
+const returns=[];
+
+for(let i=1;i<values.length;i++){
+
+returns.push(
+(values[i]-values[i-1])/values[i-1]
+);
+
+}
+
+const mean=
+returns.reduce((a,b)=>a+b,0)/returns.length;
+
+const variance=
+returns.reduce(
+(s,x)=>s+Math.pow(x-mean,2),
+0
+)/returns.length;
+
+return Math.sqrt(variance)*100;
 
 }
 
 
 /* =========================
-   ANALISI ASSET
+   SCORE
 ========================= */
 
 async function analyzeAsset(asset){
 
-const ticker=await getTicker(asset.symbol);
-const klines=await getKlines(asset.symbol);
+const t=await ticker(asset.symbol);
+const k=await klines(asset.symbol,"1h",200);
 
-const prices=closes(klines);
-const vols=volumes(klines);
+const close=k.map(x=>+x[4]);
+const vols=k.map(x=>+x[5]);
 
-const current=prices[prices.length-1];
+const price=+t.lastPrice;
+const change=+t.priceChangePercent;
 
-const ema20=ema(prices,20);
-const ema50=ema(prices,50);
+const e20=ema(close,20);
+const e50=ema(close,50);
 
-const rsiValue=rsi(prices);
-const macdValue=macd(prices);
-const mom=momentum(prices);
-const vol=volatility(prices);
+const r=rsi(close);
+const m=momentum(close);
+const v=volatility(close);
 
-const avgVolume=
-vols.slice(-20)
+const avgVol=
+[18/09, 21:24] Chatt: vols.slice(-20)
 .reduce((a,b)=>a+b,0)/20;
 
-const recentVolume=
-vols[vols.length-1];
+const scoreStart=50;
 
-let score=50;
+let score=scoreStart;
 
 
 /* TREND */
 
-if(current>ema20)
-score+=10;
-else
-score-=10;
+if(price>e20) score+=9;
+else score-=9;
 
-if(ema20>ema50)
-score+=10;
-else
-score-=10;
+if(e20>e50) score+=9;
+else score-=9;
 
 
 /* RSI */
 
-if(rsiValue>=50 && rsiValue<=68)
-score+=8;
-
-if(rsiValue>75)
-score-=8;
-
-if(rsiValue<30)
-[18/09, 20:33] Chatt: score+=3;
-
-
-/* MACD */
-
-if(macdValue>0)
-score+=7;
-else
-score-=7;
+if(r>=50 && r<=68) score+=8;
+else if(r>75) score-=7;
+else if(r<30) score+=2;
 
 
 /* MOMENTUM */
 
-if(mom>3)
-score+=8;
-else if(mom>0)
-score+=4;
-else if(mom<-3)
-score-=8;
-else
-score-=3;
+if(m>4) score+=9;
+else if(m>0) score+=4;
+else if(m<-4) score-=9;
+else score-=4;
 
 
 /* VOLUME */
 
-if(recentVolume>avgVolume)
+if(vols.at(-1)>avgVol)
 score+=5;
 
 
-/* VOLATILITA */
+/* VOLATILITY */
 
-if(vol>5)
+if(v>5)
 score-=5;
 
-
-/* LIMIT */
-
-score=Math.max(0,Math.min(100,Math.round(score)));
+score=
+Math.max(0,Math.min(100,Math.round(score)));
 
 
-/* VERDETTO */
-
-let verdict;
+let status;
 let color;
-let simple;
+let explanation;
 
-if(score>=75){
+if(score>=78){
 
-verdict="SEGNALE POSITIVO";
+status="OPPORTUNITÀ FORTE";
 color="green";
 
-simple=
-"Il quadro attuale è abbastanza favorevole. "+
-"Più indicatori stanno andando nella stessa direzione.";
+explanation=
+"Il quadro tecnico è favorevole: trend, momentum e altri segnali "+
+"stanno mostrando una buona combinazione. Non significa che il prezzo "+
+"debba salire, ma il setup merita attenzione.";
 
 }
-else if(score>=55){
+else if(score>=60){
 
-verdict="DA TENERE D'OCCHIO";
+status="QUASI PRONTO";
 color="yellow";
 
-simple=
-"Ci sono alcuni segnali positivi, ma anche elementi "+
-"che consigliano prudenza.";
+explanation=
+"Ci sono elementi interessanti, ma manca ancora una conferma. "+
+"Conviene osservare cosa farà il prezzo prima di considerare "+
+"lo scenario come forte.";
 
 }
 else{
 
-verdict="SEGNALE DEBOLE";
+status="NESSUN SETUP FORTE";
 color="red";
 
-simple=
-"Il quadro attuale non è particolarmente forte. "+
-"Il rischio di movimenti contrari è maggiore.";
+explanation=
+"Al momento i segnali non sono abbastanza convincenti. "+
+"Questo non significa necessariamente che il prezzo scenderà: "+
+"significa che il setup non è abbastanza chiaro.";
 
 }
 
 
 let trend;
 
-if(current>ema20 && ema20>ema50)
-trend="Rialzista 📈";
-else if(current<ema20 && ema20<ema50)
-trend="Ribassista 📉";
+if(price>e20 && e20>e50)
+trend="Rialzista";
+
+else if(price<e20 && e20<e50)
+trend="Ribassista";
+
 else
-trend="Misto ↔️";
+trend="Misto";
 
 
 return{
 
 ...asset,
-
-price:parseFloat(ticker.lastPrice),
-change:parseFloat(ticker.priceChangePercent),
-
-rsi:rsiValue,
-ema20,
-ema50,
-macd:macdValue,
-momentum:mom,
-volume:recentVolume,
-volatility:vol,
-
+price,
+change,
+e20,
+e50,
+rsi:r,
+momentum:m,
+volatility:v,
 score,
-verdict,
+status,
 color,
-simple,
+explanation,
 trend
 
 };
@@ -814,94 +1434,152 @@ trend
 
 
 /* =========================
-   MERCATO
+   HOME
 ========================= */
 
-async function getMarketData(){
-
-const market=document.getElementById("market");
-
-market.innerHTML=
-"<div class='loading'>📡 Sto leggendo il mercato...</div>";
+async function scanMarket(){
 
 try{
 
 const results=[];
 
-for(const asset of assets){
+for(const asset of ASSETS){
 
-const data=await analyzeAsset(asset);
+try{
 
-results.push(data);
+results.push(
+await analyzeAsset(asset)
+);
 
-}
+}catch(e){
 
-marketData=results;
-
-showMarket(results);
-
-return results;
-
-}
-catch(error){
-
-console.error(error);
-
-market.innerHTML=
-"<div class='red'>"+
-"Non riesco a leggere i dati in questo momento.<br>"+
-"Controlla la connessione e riprova."+
-"</div>";
-
-return[];
+console.log(asset.symbol,e);
 
 }
 
 }
 
+market=results;
 
-/* =========================
-   MOSTRA MERCATO
-========================= */
+renderOpportunities(results);
 
-function showMarket(data){
+}catch(e){
+
+document.getElementById("opportunities").innerHTML=
+"<div class='empty'>Dati temporaneamente non disponibili.</div>";
+
+}
+
+}
+
+
+function renderOpportunities(data){
+
+if(!data.length)
+return;
+
+data.sort((a,b)=>b.score-a.score);
+
+const best=data[0];
+
+document.getElementById("heroTitle").textContent=
+best.emoji+" "+best.name+" — "+best.status;
+
+document.getElementById("heroText").textContent=
+best.explanation;
+
+document.getElementById("heroAsset").textContent=
+best.short;
+
+document.getElementById("heroScore").textContent=
+best.score+"/100";
+
+document.getElementById("heroRisk").textContent=
+best.volatility>5?"Alto":
+best.volatility>3?"Medio":"Contenuto";
+
+document.getElementById("lastUpdate").textContent=
+"aggiornato "+new Date().toLocaleTimeString("it-IT");
+
 
 let html="";
 
-data.forEach(asset=>{
+data.forEach(a=>{
 
-const changeClass=
-asset.change>=0?"green":"red";
+let simpleScenario;
 
-const arrow=
-asset.change>=0?"▲":"▼";
+if(a.trend==="Rialzista"){
+
+simpleScenario=
+"Se il prezzo mantiene la struttura rialzista, "+
+"lo scenario positivo resta valido.";
+
+}else if(a.trend==="Ribassista"){
+
+simpleScenario=
+"Il trend è debole. Prima di cercare un ingresso "+
+"conviene aspettare un miglioramento della struttura.";
+
+}else{
+
+simpleScenario=
+"Il mercato è indeciso. Serve una conferma prima "+
+"di considerare il movimento affidabile.";
+
+}
+
 
 html+=`
 
-<div class="market">
+<div class="asset-card"
+onclick="openAsset('${a.symbol}')">
 
-<div class="market-top">
+<div class="asset-head">
 
-<div>
-
-<div class="name">
-${asset.emoji} ${asset.name}
+<div class="asset-name">
+${a.emoji} ${a.name}
 </div>
 
-<div class="change ${changeClass}">
-${arrow} ${asset.change.toFixed(2)}% nelle ultime 24h
+<div class="pill ${a.color}">
+${a.status}
 </div>
 
 </div>
 
-<div class="price">
-
-$${asset.price.toLocaleString(
+<div class="asset-price">
+$${a.price.toLocaleString(
 "en-US",
 {maximumFractionDigits:2}
 )}
+</div>
+
+<div class="${a.change>=0?"green":"red"}"
+style="font-size:13px;margin-top:5px">
+
+${a.change>=0?"▲":"▼"}
+${Math.abs(a.change).toFixed(2)}% 24h
 
 </div>
+
+<div style="margin-top:13px">
+
+<div class="muted" style="font-size:11px">
+ALPHAMIND SCORE
+</div>
+
+<div class="score ${a.color}">
+${a.score}/100
+</div>
+
+</div>
+
+<div class="reason">
+${a.explanation}
+</div>
+
+<div class="scenario">
+[18/09, 21:24] Chatt: <strong>Scenario:</strong><br>
+${simpleScenario}
 
 </div>
 
@@ -911,207 +1589,600 @@ $${asset.price.toLocaleString(
 
 });
 
-market.innerHTML=html;
+document.getElementById("opportunities").innerHTML=html;
+
+
+/* ALERT */
+
+if(alerts && best.score>=78){
+
+if("Notification" in window &&
+Notification.permission==="granted"){
+
+new Notification(
+"AlphaMind — setup rilevato",
+{
+body:
+best.name+
+" ha uno score di "+
+best.score+"/100."
+}
+);
+
+}
+
+}
 
 }
 
 
 /* =========================
-   ANALISI
+   APRI ASSET
 ========================= */
 
-async function analyze(){
+function openAsset(symbol){
 
-const ranking=
-document.getElementById("ranking");
+document.getElementById("assetSelect").value=symbol;
 
-const analysis=
-document.getElementById("analysis");
+document.querySelectorAll(".nav button")[1].click();
 
-ranking.innerHTML=
-"<div class='loading'>🧠 Sto analizzando...</div>";
+loadChart();
 
-analysis.innerHTML=
-"<div class='loading'>Controllo trend, momentum, RSI, volume e volatilità...</div>";
+}
 
-const data=await getMarketData();
 
-if(!data.length){
+/* =========================
+   GRAFICO
+========================= */
 
-ranking.innerHTML=
-"<div class='red'>Analisi non disponibile.</div>";
+function changeInterval(interval,button){
 
-analysis.innerHTML="";
+currentInterval=interval;
+
+document.querySelectorAll(".toolbar button")
+.forEach(b=>b.classList.remove("active"));
+
+button.classList.add("active");
+
+loadChart();
+
+}
+
+
+async function loadChart(){
+
+const container=
+document.getElementById("mainChart");
+
+if(!container)
+return;
+
+container.innerHTML="";
+
+const symbol=
+document.getElementById("assetSelect").value;
+
+try{
+
+const data=
+await klines(symbol,currentInterval,250);
+
+chart=
+LightweightCharts.createChart(
+container,
+{
+layout:{
+background:{color:"#0d131d"},
+textColor:"#8795a8"
+},
+grid:{
+vertLines:{color:"#172230"},
+horzLines:{color:"#172230"}
+},
+width:container.clientWidth,
+height:container.clientHeight,
+rightPriceScale:{
+borderColor:"#263447"
+},
+timeScale:{
+borderColor:"#263447",
+timeVisible:true
+}
+}
+);
+
+
+candleSeries=
+chart.addSeries(
+LightweightCharts.CandlestickSeries,
+{
+upColor:"#20d695",
+downColor:"#ff5964",
+borderVisible:false,
+wickUpColor:"#20d695",
+wickDownColor:"#ff5964"
+}
+);
+
+
+const candles=data.map(k=>({
+
+time:k[0]/1000,
+open:+k[1],
+high:+k[2],
+low:+k[3],
+close:+k[4]
+
+}));
+
+
+candleSeries.setData(candles);
+
+
+/* VOLUME */
+
+volumeSeries=
+chart.addSeries(
+LightweightCharts.HistogramSeries,
+{
+priceFormat:{type:"volume"},
+priceScaleId:""
+}
+);
+
+
+volumeSeries.priceScale().applyOptions({
+
+scaleMargins:{
+top:.82,
+bottom:0
+}
+
+});
+
+
+volumeSeries.setData(
+data.map(k=>({
+
+time:k[0]/1000,
+value:+k[5],
+color:+k[4]>=+k[1]
+?"rgba(32,214,149,.35)"
+:"rgba(255,89,100,.35)"
+
+}))
+);
+
+
+chart.timeScale().fitContent();
+
+
+const closes=data.map(k=>+k[4]);
+
+const last=closes.at(-1);
+
+const e20=ema(closes,20);
+const e50=ema(closes,50);
+const r=rsi(closes);
+
+document.getElementById("chartInfo").innerHTML=`
+
+<div class="metric">
+<small>Prezzo</small>
+<strong>$${last.toLocaleString("en-US",{maximumFractionDigits:2})}</strong>
+</div>
+
+<div class="metric">
+<small>EMA 20</small>
+<strong>$${e20.toLocaleString("en-US",{maximumFractionDigits:2})}</strong>
+</div>
+
+<div class="metric">
+<small>EMA 50</small>
+<strong>$${e50.toLocaleString("en-US",{maximumFractionDigits:2})}</strong>
+</div>
+
+<div class="metric">
+<small>RSI</small>
+<strong>${r.toFixed(1)}</strong>
+</div>
+
+<div class="metric">
+<small>Struttura</small>
+<strong>${last>e20?"Positiva":"Debole"}</strong>
+</div>
+
+`;
+
+
+document.getElementById("technicalExplanation").innerHTML=`
+
+<div class="definition">
+
+<strong>🧠 In parole semplici</strong><br><br>
+
+Il prezzo attuale è
+<strong>${last>e20?"sopra":"sotto"}</strong>
+la media EMA 20.
+
+<br><br>
+
+La EMA 20 è
+<strong>${e20>e50?"sopra":"sotto"}</strong>
+la EMA 50.
+
+<br><br>
+
+RSI: <strong>${r.toFixed(1)}</strong>
+
+<br><br>
+
+${r>70
+?"Il mercato è abbastanza tirato verso l'alto: attenzione a inseguire il prezzo."
+:r<30
+?"Il mercato è molto scarico: può essere interessante osservare una possibile reazione, ma non è una garanzia di rimbalzo."
+:"L'RSI è in una zona intermedia e da solo non dà un segnale forte."
+}
+
+</div>
+
+`;
+
+}catch(e){
+
+container.innerHTML=
+"<div class='empty'>Impossibile caricare il grafico.</div>";
+
+}
+
+}
+
+
+/* =========================
+   ORDER BOOK
+========================= */
+[18/09, 21:24] Chatt: async function loadOrderBook(){
+
+const symbol=
+document.getElementById("bookSelect").value;
+
+try{
+
+const data=
+await api(
+"https://api.binance.com/api/v3/depth?symbol="+
+symbol+
+"&limit=10"
+);
+
+let asks="";
+let bids="";
+
+
+data.asks.forEach(x=>{
+
+asks+=`
+
+<div class="book-row ask">
+
+<span>$${(+x[0]).toLocaleString("en-US",{maximumFractionDigits:4})}</span>
+
+<span style="text-align:right">
+${(+x[1]).toFixed(4)}
+</span>
+
+</div>
+
+`;
+
+});
+
+
+data.bids.forEach(x=>{
+
+bids+=`
+
+<div class="book-row bid">
+
+<span>$${(+x[0]).toLocaleString("en-US",{maximumFractionDigits:4})}</span>
+
+<span style="text-align:right">
+${(+x[1]).toFixed(4)}
+</span>
+
+</div>
+
+`;
+
+});
+
+
+document.getElementById("asks").innerHTML=asks;
+document.getElementById("bids").innerHTML=bids;
+
+}catch(e){
+
+document.getElementById("asks").innerHTML=
+"<div class='muted'>Dati non disponibili</div>";
+
+document.getElementById("bids").innerHTML=
+"<div class='muted'>Dati non disponibili</div>";
+
+}
+
+}
+
+
+/* =========================
+   VOCABOLARIO
+========================= */
+
+const DICTIONARY={
+
+"rsi":{
+title:"RSI",
+simple:
+"Misura quanto velocemente il prezzo è salito o sceso recentemente.",
+detail:
+"Sopra 70 il mercato può essere considerato molto tirato verso l'alto; sotto 30 può essere molto scarico. Non significa automaticamente che debba invertire."
+},
+
+"bull trap":{
+title:"Bull trap",
+simple:
+"È una falsa partenza verso l'alto.",
+detail:
+"Il prezzo supera una zona importante e fa pensare che stia iniziando un rialzo. Poi torna indietro e intrappola chi è entrato pensando alla continuazione del rialzo."
+},
+
+"bear trap":{
+title:"Bear trap",
+simple:
+"È una falsa partenza verso il basso.",
+detail:
+"Il prezzo sembra rompere al ribasso, attira venditori, poi recupera rapidamente."
+},
+
+"bear market":{
+title:"Bear market",
+simple:
+"Un periodo in cui il mercato è generalmente debole e tende a scendere.",
+detail:
+"Bear significa orso. Viene usato per descrivere un mercato caratterizzato da debolezza e aspettative negative."
+},
+
+"bull market":{
+title:"Bull market",
+simple:
+"Un periodo in cui il mercato è generalmente forte e tende a salire.",
+detail:
+"Bull significa toro. Viene usato per descrivere una fase positiva e rialzista."
+},
+
+"liquidità":{
+title:"Liquidità",
+simple:
+"È la quantità di compratori e venditori disponibili sul mercato.",
+detail:
+"Un mercato molto liquido permette normalmente di comprare o vendere grandi quantità con meno differenza tra il prezzo desiderato e quello effettivo."
+},
+
+"volatilità":{
+title:"Volatilità",
+simple:
+"Misura quanto velocemente e quanto ampiamente può cambiare il prezzo.",
+detail:
+"Alta volatilità significa movimenti più bruschi. Può creare opportunità ma anche aumentare molto il rischio."
+},
+
+"momentum":{
+title:"Momentum",
+simple:
+"Misura la forza del movimento recente.",
+detail:
+"Un momentum positivo indica che il prezzo sta mostrando spinta verso l'alto; negativo indica pressione verso il basso."
+},
+
+"macd":{
+title:"MACD",
+simple:
+"Confronta diverse medie del prezzo per cercare di capire la direzione della spinta.",
+detail:
+"È un indicatore tecnico utilizzato per studiare trend e momentum."
+},
+
+"ema":{
+title:"EMA",
+simple:
+"È una media del prezzo che dà più importanza ai dati recenti.",
+detail:
+"Viene spesso utilizzata per capire la direzione del trend."
+},
+
+"supporto":{
+title:"Supporto",
+simple:
+"Una zona dove il prezzo in passato ha trovato compratori.",
+detail:
+"Può comportarsi come un pavimento, ma non è una barriera garantita."
+},
+
+"resistenza":{
+title:"Resistenza",
+simple:
+"Una zona dove il prezzo in passato ha trovato venditori.",
+detail:
+"Può comportarsi come un soffitto, ma può essere superata."
+},
+
+"open interest":{
+title:"Open interest",
+simple:
+"Indica quante posizioni sui derivati risultano ancora aperte.",
+detail:
+[18/09, 21:24] Chatt: "Può aiutare a capire quanta attività è presente nel mercato dei futures."
+},
+
+"funding":{
+title:"Funding",
+simple:
+"È un pagamento periodico tra trader di futures.",
+detail:
+"Serve a mantenere il prezzo dei contratti perpetui vicino al mercato spot."
+},
+
+"liquidazione":{
+title:"Liquidazione",
+simple:
+"Succede quando una posizione viene chiusa forzatamente perché il trader non ha più margine sufficiente.",
+detail:
+"Le liquidazioni possono creare movimenti veloci, soprattutto quando sono concentrate."
+},
+
+"halving":{
+title:"Halving",
+simple:
+"È un evento in cui la ricompensa per il mining di Bitcoin viene dimezzata.",
+detail:
+"È un evento programmato del protocollo Bitcoin. Storicamente è stato seguito da periodi di forte attenzione del mercato, ma non garantisce aumenti futuri."
+},
+
+"drawdown":{
+title:"Drawdown",
+simple:
+"Misura quanto un investimento è sceso dal suo massimo precedente.",
+detail:
+"È utile per capire quanto può essere dolorosa una fase negativa."
+}
+
+};
+
+
+function explainTerm(){
+
+const input=
+document.getElementById("termInput")
+.value
+.trim()
+.toLowerCase();
+
+const box=
+document.getElementById("definition");
+
+if(!input){
+
+box.style.display="block";
+
+box.innerHTML=
+"<strong>Scrivi un termine.</strong>";
 
 return;
 
 }
 
 
-data.sort((a,b)=>b.score-a.score);
+let result=DICTIONARY[input];
 
 
-/* CLASSIFICA */
+/* ricerca parziale */
 
-let rankingHTML="";
+if(!result){
 
-data.forEach((asset,index)=>{
+const key=
+Object.keys(DICTIONARY)
+.find(k=>input.includes(k)||k.includes(input));
 
-rankingHTML+=`
+if(key)
+result=DICTIONARY[key];
 
-<div class="market">
-
-<div>
-
-<div class="name">
-#${index+1} ${asset.emoji} ${asset.name}
-</div>
-
-<div class="badge ${asset.color}">
-${asset.verdict}
-</div>
-
-</div>
-
-<div class="score ${asset.color}">
-${asset.score}/100
-</div>
-
-</div>
-
-`;
-
-});
-
-ranking.innerHTML=rankingHTML;
+}
 
 
-/* ANALISI DETTAGLIATA */
-
-let analysisHTML="";
-
-data.forEach(asset=>{
-
-analysisHTML+=`
-
-<div class="market">
-
-<div class="market-top">
-
-<div>
-
-<div class="name">
-${asset.emoji} ${asset.name}
-</div>
-
-<div class="badge ${asset.color}">
-${asset.verdict}
-</div>
-
-</div>
-
-<div class="score ${asset.color}">
-${asset.score}/100
-</div>
-
-</div>
+box.style.display="block";
 
 
-<div class="simple">
-[18/09, 20:33] Chatt: <strong>🗣️ In parole semplici:</strong><br>
-${asset.simple}
+if(result){
 
-</div>
+box.innerHTML=`
 
+<h3>${result.title}</h3>
 
-<div class="indicators">
+<strong>In parole semplici</strong><br>
 
-<div class="indicator">
-<small>Trend</small>
-${asset.trend}
-</div>
+${result.simple}
 
-<div class="indicator">
-<small>RSI</small>
-${asset.rsi.toFixed(1)}
-</div>
+<br><br>
 
-<div class="indicator">
-<small>EMA 20</small>
-$${asset.ema20.toLocaleString(
-"en-US",
-{maximumFractionDigits:2}
-)}
-</div>
+<strong>Più nel dettaglio</strong><br>
 
-<div class="indicator">
-<small>EMA 50</small>
-$${asset.ema50.toLocaleString(
-"en-US",
-{maximumFractionDigits:2}
-)}
-</div>
-
-<div class="indicator">
-<small>MACD</small>
-${asset.macd>=0?"Positivo 🟢":"Negativo 🔴"}
-</div>
-
-<div class="indicator">
-<small>Momentum</small>
-${asset.momentum.toFixed(2)}%
-</div>
-
-<div class="indicator">
-<small>Volatilità</small>
-${asset.volatility.toFixed(2)}%
-</div>
-
-<div class="indicator">
-<small>Volume</small>
-${asset.volume.toLocaleString(
-"en-US",
-{maximumFractionDigits:0}
-)}
-</div>
-
-</div>
-
-
-<div class="explain">
-
-<strong>🔎 Perché questo punteggio?</strong><br><br>
-
-Il punteggio combina diversi segnali.
-Non basta un solo indicatore per decidere.
-
-<strong>Trend:</strong>
-${asset.trend}<br>
-
-<strong>RSI:</strong>
-${asset.rsi.toFixed(1)}<br>
-
-<strong>Momentum:</strong>
-${asset.momentum.toFixed(2)}%<br>
-
-<strong>MACD:</strong>
-${asset.macd>=0?"positivo":"negativo"}<br>
-
-<strong>Volatilità:</strong>
-${asset.volatility.toFixed(2)}%
-
-</div>
-
-</div>
+${result.detail}
 
 `;
 
-});
+}else{
 
-analysis.innerHTML=analysisHTML;
+box.innerHTML=`
+
+<h3>${input}</h3>
+
+<strong>Non ho ancora questa voce nella mia base locale.</strong>
+
+<br><br>
+
+AlphaMind dovrà collegarsi a un motore linguistico
+per spiegare automaticamente qualsiasi termine non presente
+nel vocabolario.
+
+<br><br>
+
+<strong>Per ora:</strong>
+aggiungeremo progressivamente nuovi termini.
+
+`;
+
+}
+
+}
 
 
-createPortfolio();
+/* =========================
+   ALERT
+========================= */
+
+async function toggleAlerts(){
+
+alerts=!alerts;
+
+const el=
+document.getElementById("alertSwitch");
+
+if(alerts){
+
+el.classList.add("on");
+
+if("Notification" in window){
+
+const permission=
+await Notification.requestPermission();
+
+if(permission!=="granted"){
+
+alerts=false;
+el.classList.remove("on");
+
+alert(
+"Le notifiche del browser non sono state autorizzate."
+);
+
+}
+
+}
+
+}else{
+
+el.classList.remove("on");
+
+}
 
 }
 
@@ -1120,7 +2191,7 @@ createPortfolio();
    PORTAFOGLIO
 ========================= */
 
-function createPortfolio(){
+function buildPortfolio(){
 
 const capital=
 parseFloat(
@@ -1130,98 +2201,90 @@ document.getElementById("capital").value
 const risk=
 document.getElementById("risk").value;
 
-let core;
-let growth;
-let speculative;
-let cash;
+let base,growth,spec,cash;
 
 if(risk==="basso"){
 
-core=60;
+base=60;
 growth=10;
-speculative=0;
+spec=0;
 cash=30;
 
-}
-else if(risk==="medio"){
+}else if(risk==="medio"){
 
-core=50;
+base=50;
 growth=20;
-speculative=10;
+spec=10;
 cash=20;
 
-}
-else{
+}else{
 
-core=40;
+base=40;
 growth=25;
-speculative=20;
+spec=20;
 cash=15;
 
 }
 
 
-document.getElementById("portfolio").innerHTML=`
+const euro=p=>
+"€"+Math.round(
+capital*p/100
+).toLocaleString("it-IT");
 
-<div class="grid">
 
-<div class="indicator">
+document.getElementById("portfolioResult").innerHTML=`
 
-🛡️ <strong>Base</strong><br>
+<div class="card">
 
-€${Math.round(
-capital*core/100
-).toLocaleString("it-IT")}
+<h2>Struttura indicativa</h2>
 
-<br>${core}%
+<div class="portfolio-grid">
 
+<div class="portfolio-box">
+<div class="muted">Base</div>
+<strong>${euro(base)}</strong>
+<br>
+${base}%
 </div>
 
-<div class="indicator">
-
-📈 <strong>Crescita</strong><br>
-
-€${Math.round(
-capital*growth/100
-).toLocaleString("it-IT")}
-
-<br>${growth}%
-
+<div class="portfolio-box">
+<div class="muted">Crescita</div>
+<strong>${euro(growth)}</strong>
+<br>
+${growth}%
 </div>
 
-<div class="indicator">
-
-🔥 <strong>Speculativo</strong><br>
-
-€${Math.round(
-capital*speculative/100
-).toLocaleString("it-IT")}
-
-<br>${speculative}%
-
+<div class="portfolio-box">
+<div class="muted">Speculativo</div>
+<strong>${euro(spec)}</strong>
+<br>
+${spec}%
 </div>
 
-<div class="indicator">
-
-💵 <strong>Liquidità</strong><br>
-
-€${Math.round(
-capital*cash/100
-).toLocaleString("it-IT")}
-
-<br>${cash}%
-
+<div class="portfolio-box">
+<div class="muted">Liquidità</div>
+<strong>${euro(cash)}</strong>
+<br>
+${cash}%
 </div>
 
 </div>
 
-<div class="simple">
+<br>
 
-<strong>🗣️ In parole semplici:</strong><br>
+<div class="definition">
 
-Più il rischio scelto è alto, maggiore è la parte destinata
-a investimenti più movimentati. La liquidità serve a non
-mettere tutto il capitale sul mercato.
+<strong>In parole semplici:</strong><br><br>
+
+La liquidità non investita serve a non essere costretti
+a mettere tutto sul mercato nello stesso momento.
+
+<br><br>
+[18/09, 21:24] Chatt: Questa è una simulazione educativa e non una raccomandazione
+personalizzata.
+
+</div>
 
 </div>
 
@@ -1234,11 +2297,23 @@ mettere tutto il capitale sul mercato.
    AVVIO
 ========================= */
 
-getMarketData();
+scanMarket();
 
 setInterval(
-getMarketData,
-30000
+scanMarket,
+60000
+);
+
+window.addEventListener(
+"resize",
+()=>{
+if(chart){
+chart.applyOptions({
+width:
+document.getElementById("mainChart").clientWidth
+});
+}
+}
 );
 
 </script>

@@ -1,0 +1,667 @@
+
+
+```html
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AlphaMind AI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #07111f;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    padding: 20px 0 10px;
+}
+
+.logo {
+    font-size: 38px;
+    font-weight: bold;
+    color: #35e69a;
+}
+
+.subtitle {
+    color: #91a4bd;
+    margin-top: 8px;
+}
+
+.card {
+    background: #0d1b2d;
+    border: 1px solid #1c3553;
+    border-radius: 18px;
+    padding: 20px;
+    margin: 18px 0;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+label {
+    color: #9eb0c8;
+    font-size: 14px;
+}
+
+input,
+select,
+button {
+    width: 100%;
+    margin-top: 7px;
+    padding: 13px;
+    border-radius: 10px;
+    border: 1px solid #294666;
+    background: #081625;
+    color: white;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 18px;
+    background: #16a36a;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1bc47e;
+}
+
+.market {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #203853;
+}
+
+.market:last-child {
+    border-bottom: none;
+}
+
+.name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.change {
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+.green {
+    color: #35e69a;
+}
+
+.red {
+    color: #ff6262;
+}
+
+.yellow {
+    color: #ffd166;
+}
+
+.score {
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: #122943;
+    margin-top: 6px;
+    font-size: 12px;
+}
+
+.loading {
+    color: #9eb0c8;
+    text-align: center;
+    padding: 20px;
+}
+
+.disclaimer {
+    color: #71869f;
+    font-size: 12px;
+    line-height: 1.5;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="logo">🧠 AlphaMind AI</div>
+        <div class="subtitle">
+            Analizzatore intelligente dei mercati
+        </div>
+    </div>
+
+    <div class="card">
+
+        <h2>⚙️ Il tuo profilo</h2>
+
+        <div class="grid">
+
+            <label>
+                Capitale disponibile (€)
+                <input id="capital" type="number" value="10000">
+            </label>
+
+            <label>
+                Orizzonte
+                <select id="horizon">
+                    <option value="3">3 mesi</option>
+                    <option value="6">6 mesi</option>
+                    <option value="12" selected>12 mesi</option>
+                    <option value="24">24 mesi</option>
+                    <option value="36">36 mesi</option>
+                </select>
+            </label>
+
+            <label>
+                Profilo di rischio
+                <select id="risk">
+                    <option value="basso">Basso</option>
+                    <option value="medio" selected>Medio</option>
+                    <option value="alto">Alto</option>
+                </select>
+            </label>
+
+        </div>
+
+        <button onclick="analyze()">
+            🔎 ANALIZZA IL MERCATO
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h2>📡 Mercato in tempo reale</h2>
+
+        <div id="market">
+[18/09, 13:57] Chatt: <div class="loading">
+                Connessione ai dati di mercato...
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>🏆 Classifica AlphaMind</h2>
+
+        <div id="ranking">
+            <div class="loading">
+                Premi "Analizza il mercato"
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>💰 Struttura portafoglio</h2>
+
+        <div id="portfolio">
+            Inserisci il tuo profilo e avvia l'analisi.
+        </div>
+
+    </div>
+
+    <div class="card disclaimer">
+
+        ⚠️ AlphaMind è uno strumento di ricerca e supporto
+        decisionale. I punteggi non garantiscono rendimenti e
+        non costituiscono consulenza finanziaria personalizzata.
+
+    </div>
+
+</div>
+
+
+<script>
+
+let marketData = {};
+
+
+/* =========================
+   DATI LIVE BINANCE
+   ========================= */
+
+async function getMarketData() {
+
+    try {
+
+        const symbols = [
+            "BTCUSDT",
+            "ETHUSDT"
+        ];
+
+        let results = [];
+
+        for (const symbol of symbols) {
+
+            const response = await fetch(
+                "https://api.binance.com/api/v3/ticker/24hr?symbol=" + symbol
+            );
+
+            const data = await response.json();
+
+            results.push({
+                symbol: symbol,
+                price: parseFloat(data.lastPrice),
+                change: parseFloat(data.priceChangePercent),
+                volume: parseFloat(data.volume)
+            });
+
+        }
+
+        marketData = results;
+
+        showMarket(results);
+
+        return results;
+
+    } catch (error) {
+
+        document.getElementById("market").innerHTML =
+            "<div class='red'>Impossibile recuperare i dati live.</div>";
+
+        return [];
+
+    }
+
+}
+
+
+/* =========================
+   VISUALIZZA MERCATO
+   ========================= */
+
+function showMarket(data) {
+
+    let html = "";
+
+    data.forEach(asset => {
+
+        const name =
+            asset.symbol === "BTCUSDT"
+            ? "Bitcoin (BTC)"
+            : "Ethereum (ETH)";
+
+        const changeClass =
+            asset.change >= 0
+            ? "green"
+            : "red";
+
+        const arrow =
+            asset.change >= 0
+            ? "▲"
+            : "▼";
+
+        html += `
+
+        <div class="market">
+
+            <div>
+
+                <div class="name">
+                    ${name}
+                </div>
+
+                <div class="change ${changeClass}">
+                    ${arrow}
+                    ${asset.change.toFixed(2)}%
+                    nelle ultime 24h
+                </div>
+
+            </div>
+
+            <div class="price">
+
+                $${asset.price.toLocaleString(
+                    "en-US",
+                    {
+                        maximumFractionDigits: 2
+                    }
+                )}
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    document.getElementById("market").innerHTML = html;
+
+}
+
+
+/* =========================
+   SCORING ALPHAMIND
+   ========================= */
+
+function calculateScore(asset) {
+
+    /*
+    V1:
+    Lo scoring utilizza principalmente
+    momentum e variazione di prezzo.
+
+    Nelle prossime versioni aggiungeremo:
+    trend tecnico
+    volume
+    volatilità
+    fondamentali
+    news
+    sentiment
+    flussi
+    macroeconomia
+    */
+
+    let momentum = asset.change;
+
+    let score = 70;
+
+    if (momentum > 5)
+        score += 15;
+
+    else if (momentum > 2)
+        score += 10;
+
+    else if (momentum > 0)
+        score += 5;
+
+    else if (momentum < -5)
+        score -= 15;
+
+    else if (momentum < -2)
+        score -= 10;
+
+    else if (momentum < 0)
+        score -= 5;
+
+
+    /*
+    Piccolo aggiustamento
+    in base alla volatilità implicita
+    */
+
+    if (Math.abs(momentum) > 8)
+[18/09, 13:57] Chatt: score -= 5;
+
+
+    return Math.max(0, Math.min(100, Math.round(score)));
+
+}
+
+
+/* =========================
+   ANALISI
+   ========================= */
+
+async function analyze() {
+
+    const ranking = document.getElementById("ranking");
+
+    ranking.innerHTML =
+        "<div class='loading'>🧠 AlphaMind sta analizzando...</div>";
+
+    const data = await getMarketData();
+
+    if (!data.length) {
+
+        ranking.innerHTML =
+            "<div class='red'>Dati non disponibili.</div>";
+
+        return;
+
+    }
+
+
+    let scored = data.map(asset => {
+
+        return {
+            ...asset,
+            score: calculateScore(asset)
+        };
+
+    });
+
+
+    scored.sort((a, b) => b.score - a.score);
+
+
+    let html = "";
+
+
+    scored.forEach((asset, index) => {
+
+        const name =
+            asset.symbol === "BTCUSDT"
+            ? "Bitcoin (BTC)"
+            : "Ethereum (ETH)";
+
+
+        let verdict;
+
+        let color;
+
+
+        if (asset.score >= 80) {
+
+            verdict = "FORTE OPPORTUNITÀ";
+            color = "green";
+
+        } else if (asset.score >= 65) {
+
+            verdict = "INTERESSANTE";
+            color = "yellow";
+
+        } else {
+
+            verdict = "ATTENZIONE";
+            color = "red";
+
+        }
+
+
+        html += `
+
+        <div class="market">
+
+            <div>
+
+                <div class="name">
+                    #${index + 1} ${name}
+                </div>
+
+                <div class="badge ${color}">
+                    ${verdict}
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="score ${color}">
+                    ${asset.score}/100
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+
+    ranking.innerHTML = html;
+
+
+    createPortfolio();
+
+}
+
+
+/* =========================
+   PORTAFOGLIO
+   ========================= */
+
+function createPortfolio() {
+
+    const capital =
+        parseFloat(
+            document.getElementById("capital").value
+        ) || 0;
+
+
+    const risk =
+        document.getElementById("risk").value;
+
+
+    let core;
+    let growth;
+    let speculative;
+    let cash;
+
+
+    if (risk === "basso") {
+
+        core = 70;
+        growth = 15;
+        speculative = 0;
+        cash = 15;
+
+    }
+
+    else if (risk === "medio") {
+
+        core = 55;
+        growth = 20;
+        speculative = 10;
+        cash = 15;
+
+    }
+
+    else {
+
+        core = 40;
+        growth = 30;
+        speculative = 20;
+        cash = 10;
+
+    }
+
+
+    document.getElementById("portfolio").innerHTML = `
+
+        <div class="grid">
+
+            <div>
+                🛡️ Core
+                <br>
+                <strong>
+                €${Math.round(
+                    capital * core / 100
+                ).toLocaleString("it-IT")}
+                </strong>
+                <br>
+                ${core}%
+            </div>
+
+            <div>
+                📈 Crescita
+                <br>
+                <strong>
+                €${Math.round(
+                    capital * growth / 100
+                ).toLocaleString("it-IT")}
+                </strong>
+                <br>
+                ${growth}%
+            </div>
+
+            <div>
+                🔥 Speculativo
+                <br>
+                <strong>
+                €${Math.round(
+                    capital * speculative / 100
+                ).toLocaleString("it-IT")}
+                </strong>
+                <br>
+                ${speculative}%
+            </div>
+
+            <div>
+                💵 Liquidità
+                <br>
+                <strong>
+                €${Math.round(
+                    capital * cash / 100
+                ).toLocaleString("it-IT")}
+                </strong>
+                <br>
+                ${cash}%
+            </div>
+
+        </div>
+
+    `;
+[18/09, 13:57] Chatt: }
+
+
+/* =========================
+   AGGIORNAMENTO AUTOMATICO
+   ========================= */
+
+getMarketData();
+
+setInterval(
+    getMarketData,
+    30000
+);
+
+</script>
+
+</body>
+</html>
+```
